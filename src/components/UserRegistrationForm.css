@@ -64,3 +64,10 @@ textarea,
 .btn-primary:hover {
     background-color: #AE4600;
 }
+
+.validation-error {
+    color: red;
+    font-size: 16px;
+    margin-top: 5px;
+    display: block;
+  }
