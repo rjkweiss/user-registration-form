@@ -1,0 +1,63 @@
+/* custom styling for checkbox & radio buttons */
+.checkbox-label,
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    position: relative;
+}
+
+/* Change color when checked */
+input[type="checkbox"]:checked {
+    background-color: #c75000;
+    border-color: #c75000;
+}
+
+/* Add checkmark when checked */
+input[type="checkbox"]:checked::after {
+    content: "✔";
+    font-size: 12px;
+    color: white;
+    position: absolute;
+    top: 0px;
+    left: 1px;
+}
+
+/* custom styling for radio */
+input[type="radio"] {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+}
+
+/* Change background when checked */
+input[type="radio"]:checked {
+    background-color: #c75000;
+    border-color: #c75000;
+}
+
+/* Inner circle for selected radio */
+input[type="radio"]:checked::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background: #C75000;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
