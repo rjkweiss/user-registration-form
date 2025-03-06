@@ -65,9 +65,15 @@ textarea,
     background-color: #AE4600;
 }
 
+.error {
+    border: 2px solid red;
+}
+
+.validation-error-space {
+    min-height: 20px;
+}
+
 .validation-error {
     color: red;
     font-size: 16px;
-    margin-top: 5px;
-    display: block;
-  }
+}

@@ -4,14 +4,6 @@ import './UserRegistrationForm.css';
 
 function UserRegistrationForm() {
 
-    // state variables to keep track of our form input
-    // const [name, setName] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [phone, setPhone] = useState('');
-    // const [phoneType, setPhoneType] = useState('');
-    // const [staff, setStaff] = useState('');
-    // const [bio, setBio] = useState('');
-    // const [emailNotifications, setEmailNotifications] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -25,6 +17,9 @@ function UserRegistrationForm() {
     // store errors encountered during validation
     const [validationErrors, setValidationErrors] = useState({});
 
+    // tracks if form has been submitted
+    const [submitted, setSubmitted] = useState(false);
+
     // handle data change
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -33,6 +28,9 @@ function UserRegistrationForm() {
             ...formData,
             [name]: type === "checkbox" ? checked : value
         });
+
+        // check if we have submitted and then call to validate the form again
+        if (submitted) validateForm();
     }
 
     // regular expressions for validating phone number & email address
@@ -84,11 +82,21 @@ function UserRegistrationForm() {
         // prevent default behavior
         e.preventDefault();
 
+        // updated submitted boolean
+        setSubmitted(true);
+
         // check if form is correct
         if (validateForm()) {
+
+            // get data to be submitted and edit
+            const submissionData ={
+                ...formData,
+                phoneType: formData.phone ? formData.phoneType : "",
+                submittedOn: new Date().toISOString()
+            };
             // log data in console <-- could use REST API later on for this part
             console.log("form submitted successfully!");
-            console.log(formData);
+            console.log(submissionData);
 
             // reset the form after it has been successfully submitted
             setFormData({
@@ -100,6 +108,13 @@ function UserRegistrationForm() {
                 bio: "",
                 emailNotifications: false
             });
+
+            // clear out validation errors
+            setValidationErrors({});
+
+            // reset the submitted status of form
+            setSubmitted(false);
+
         } else {
             console.log("validation error!");
         }
@@ -115,60 +130,85 @@ function UserRegistrationForm() {
                 <div className="form-group">
                     <label htmlFor="name">Name</label>
                     <input
-                        className="form-control"
+                        className={`form-control ${validationErrors.name ? 'error': ''}`}
                         type="text"
                         name="name"
                         id="name"
                         onChange={handleChange}
                         value={formData.name}
+                        aria-describedby='nameError'
                     />
-                    {validationErrors.name && (<span className="validation-error">{validationErrors.name}</span>)}
+
+                    {/* only show when error occurs */}
+                    <div className="validation-error-space">
+                        {validationErrors.name && (<span className="validation-error">{validationErrors.name}</span>)}
+                    </div>
+
                 </div>
 
                 {/* email*/}
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
                     <input
-                        className="form-control"
+                        className={`form-control ${validationErrors.email ? 'error' : ''}`}
                         type="email"
                         name="email"
                         id="email"
                         onChange={handleChange}
                         value={formData.email}
+                        aria-describedby='emailError'
                     />
-                    {validationErrors.email && (<span className="validation-error">{validationErrors.email}</span>)}
+
+                    {/* only show when error occurs */}
+                    <div className="validation-error-space">
+                        {validationErrors.email && (<span className="validation-error">{validationErrors.email}</span>)}
+                    </div>
+
                 </div>
 
                 {/* phone number */}
                 <div className="form-group">
                     <label htmlFor="phone">Phone</label>
                     <input
-                        className="form-control"
+                        className={`form-control ${validationErrors.phone ? 'error': ''}`}
                         type="tel"
                         name="phone"
                         id="phone"
                         onChange={handleChange}
                         value={formData.phone}
+                        placeholder='(123) 456-7890'
+                        aria-describedby='phoneError'
                     />
-                    {validationErrors.phone && (<span className="validation-error">{validationErrors.phone}</span>)}
+
+                    {/* only show when error occurs */}
+                    <div className="validation-error-space">
+                        {validationErrors.phone && (<span className="validation-error">{validationErrors.phone}</span>)}
+                    </div>
                 </div>
 
                 {/* phone type */}
                 <div className="form-group">
                     <label htmlFor="phoneType">PhoneType</label>
                     <select
-                        className="form-control"
+                        className={`form-control ${validationErrors.phoneType ? 'error': ''}`}
                         name="phoneType"
                         id="phoneType"
                         onChange={handleChange}
                         value={formData.phoneType}
+                        disabled={!formData.phone}
+                        aria-describedby='phoneTypeError'
                     >
                         <option value="" disabled>Select Phone Type</option>
                         <option value="Mobile">Mobile</option>
                         <option value="Work">Work</option>
                         <option value="Home">Home</option>
                     </select>
-                    {validationErrors.phoneType && (<span className="validation-error">{validationErrors.phoneType}</span>)}
+
+                    {/* only show when error occurs */}
+                    <div className="validation-error-space">
+                        {validationErrors.phoneType && (<span className="validation-error">{validationErrors.phoneType}</span>)}
+                    </div>
+
                 </div>
 
                 {/* staff */}
@@ -209,13 +249,19 @@ function UserRegistrationForm() {
                 <div className="form-group">
                     <label htmlFor="bio">Bio</label>
                     <textarea
+                        className={`form-control ${validationErrors.bio ? 'error' : ''}`}
                         name="bio"
                         id="bio"
                         rows="3"
                         onChange={handleChange}
                         value={formData.bio}
+                        aria-describedby='bioError'
                     />
-                    {validationErrors.bio && (<span className="validation-error">{validationErrors.bio}</span>)}
+
+                    {/* only show when an error occurs */}
+                    <div className="validation-error-space">
+                        {validationErrors.bio && (<span className="validation-error">{validationErrors.bio}</span>)}
+                    </div>
                 </div>
 
                 {/* sign up checkbox */}
